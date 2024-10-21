@@ -24,19 +24,32 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
-app.get('/api/2015-12-25', (req, res) => {
-  const response = {
-      unix: 1451001600000,
-      utc: "Fri, 25 Dec 2015 00:00:00 GMT"
-  };
-  res.json(response);
-});
+app.get('/api/:date?', (req, res) => {
+  const inputDate = req.params.date;
+  let date;
 
-app.get('/api/1451001600000', (req, res) => {
+  // Check if the input date is empty
+  if (!inputDate) {
+      // Use current time if the date parameter is empty
+      date = new Date();
+  } else if (!isNaN(inputDate)) {
+      // Check if the input is a number (Unix timestamp)
+      date = new Date(parseInt(inputDate)); // Convert to number
+  } else {
+      // Create a date object from the input (string)
+      date = new Date(inputDate);
+      
+      // Check if the date is valid
+      if (isNaN(date.getTime())) {
+          return res.status(400).json({ error: "Invalid Date" });
+      }
+  }
+
   const response = {
-      unix: 1451001600000,
-      utc: "Fri, 25 Dec 2015 00:00:00 GMT"
+      unix: date.getTime(), // Unix timestamp in milliseconds
+      utc: date.toUTCString() // UTC string representation
   };
+
   res.json(response);
 });
 
