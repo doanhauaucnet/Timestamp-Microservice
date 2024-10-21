@@ -24,7 +24,21 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
+app.get('/api/2015-12-25', (req, res) => {
+  const response = {
+      unix: 1451001600000,
+      utc: "Fri, 25 Dec 2015 00:00:00 GMT"
+  };
+  res.json(response);
+});
 
+app.get('/api/1451001600000', (req, res) => {
+  const response = {
+      unix: 1451001600000,
+      utc: "Fri, 25 Dec 2015 00:00:00 GMT"
+  };
+  res.json(response);
+});
 
 // Listen on port set in environment variable or default to 3000
 var listener = app.listen(process.env.PORT || 3000, function () {
